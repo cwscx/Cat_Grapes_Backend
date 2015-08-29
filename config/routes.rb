@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
   
+  devise_for :students, controllers: {
+    registrations: 'students/registrations',
+    sessions: 'students/sessions',
+  }
+  
   root to: "home#index"
   
   # The priority is based upon order of creation: first created -> highest priority.
