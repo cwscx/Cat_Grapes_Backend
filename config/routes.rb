@@ -12,7 +12,6 @@ Rails.application.routes.draw do
   
   devise_scope :students do
     get  "/student/current_record", to: "students/student_current_records#index"
-    post "/student/current_record", to: "students/student_current_records#create"
     post "/student/update_current_record", to: "students/student_current_recrods#update"
     
     get  "/student/learnt_components", to: "students/student_learnt_components#index"

@@ -125,6 +125,7 @@ class Students::RegistrationsController < Devise::RegistrationsController
   
   # Set up the initial current record to track the student's most recent schedule
   # Needs to be saved later, cos build won't save automatically like create
+  # In student_current_record, either video_id or exercise_id needs to be null.
   def initialize_current_record(student)
     student.build_student_current_record(
       book_id: Book.first.id, 

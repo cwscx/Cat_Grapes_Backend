@@ -1,13 +1,26 @@
 class Students::StudentCurrentRecordsController < ApplicationController
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }, on: :create
   
+  before_action :authenticate_student!
+  
   def index
     if request.format == "text/html"
       
     else
-      if @current_student.student_current_record
+      if current_student.student_current_record
+        record_valid?(current_student.student_current_record)
+        
         respond_to do |format|
-          format.json {render json: {current_record: @current_student.student_current_record}, status: 200 }
+          format.json {render json: {
+            current_record: {
+              book_id: current_student.student_current_record.book_id,
+              unit_id: current_student.student_current_record.unit_id,
+              case_id: current_student.student_current_record.case_id,
+              exercise_id: current_student.student_current_record.exercise_id,
+              video_id: current_student.student_current_record.video_id,
+            },
+            status: 200}
+          }
         end
       else
         respond_to do |format|
@@ -17,48 +30,12 @@ class Students::StudentCurrentRecordsController < ApplicationController
     end
   end
   
-  def new
-    
-  end
-  
-  def create
-    if request.format == "text/html"
-      
-    else
-      return_message = ""   # variables to record component conditions to return message
-    
-      # If a hash is in another hash, the sub-hash needs to be read as |key, value|
-      request.params[:learnedComponents].each do |key, value|
-        if @current_student.student_learnt_components.find_by(component_id: value[:component_id])
-          return_message << "Component #{value[:component_id]} already learnt! "
-        else
-          # The default next_test_date is null, just add the test_interval to the current date
-          next_test_date = Date.current().advance(:days => +value[:test_interval].to_i)
-
-          @current_student.student_learnt_components.create(
-            component_id: value[:component_id],
-            current_strength: value[:current_strength],
-            strength_history: value[:current_strength].to_s,
-            test_interval: value[:test_interval],
-            test_date_array: value[:test_interval].to_s,
-            next_test_date: next_test_date
-          )
-          return_message << "Component #{value[:component_id]} is newly learnt! "
-        end
-      end
-    
-      respond_to do |format|
-        format.json {render json: {message: return_message}, status: :created}
-      end
-    end
-  end
-  
   def update
     if request.format == "text/html"
       
     else
       component_id = request.params[:learnedComponents][:component_id]
-      if lcomponent = @current_student.student_learnt_components.find_by(component_id: component_id)
+      if lcomponent = current_student.student_learnt_components.find_by(component_id: component_id)
       
         # Check the learned component id and the passed in edit id
         if lcomponent.id.to_i == request.params[:id].to_i
@@ -108,6 +85,16 @@ class Students::StudentCurrentRecordsController < ApplicationController
         respond_to do |format|
           format.json {render json: {message: "The component is not even learnt yet"}, status: 304}
         end
+      end
+    end
+  end
+  
+  private
+
+  def record_valid?(rec)
+    if ((rec.exercise_id.nil? && rec.video_id.nil?) || (!rec.exercise_id.nil? && !rec.video_id.nil?))
+      respond_to do |format|
+        format.json {render json: {message: "Invalid Record"}, status: 500}
       end
     end
   end

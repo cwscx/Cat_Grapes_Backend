@@ -109,5 +109,35 @@ Student: {
 			a Unit has many cases in sequence.
 			a Case has many exercises and videos in sequence.
 		}
+	},
+	Get Current Record: {
+		url:	localhost:3000/student/current_record,
+		method:	GET,
+		paras:	nil,
+		return: {
+			Invalid Record: {     	// When both exercise_id and vedio_id have values or both not
+				json: {
+					message: "Invalid Record"
+				}, 
+				status: 500
+			},
+			Record Not Found: {
+				json: {
+					message: "Records Not Found."
+				}, 
+				status: 404
+			},
+			Found: {
+				json: {
+			  	  current_record: {
+			    	  book_id: 
+			    	  unit_id: 
+			    	  case_id: 
+			    	  exercise_id: 
+			    	  video_id:
+			  	},
+			  	status: 200
+			}
+		}
 	}
 }
