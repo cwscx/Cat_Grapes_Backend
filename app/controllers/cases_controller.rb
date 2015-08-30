@@ -36,19 +36,19 @@ class CasesController < ApplicationController
         # If case not found, return 404
         rescue Exception => e
           respond_to do |format|
-            format.json {render json: {message: e.message}, status: 404 }
+            format.json {render json: {message: e.message, reason: "Case Not Found"}, status: 404 }
           end
         end
       # If unit not found, return 404
       rescue Exception => e
         respond_to do |format|
-          format.json {render json: {message: e.message}, status: 404 }
+          format.json {render json: {message: e.message, reason: "Unit Not Found"}, status: 404 }
         end
       end
     # If book not found, return 404
     rescue Exception => e
       respond_to do |format|
-        format.json {render json: {message: e.message}, status: 404 }
+        format.json {render json: {message: e.message, reason: "Book Not Found"}, status: 404 }
       end
     end
   end

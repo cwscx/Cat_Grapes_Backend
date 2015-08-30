@@ -3,10 +3,12 @@ Student: {
 		url: 	localhost:3000/students,
 		method: POST,
 		paras: {
-			"name",			// This is not optional.
-			"email", 		// Email must follow the format
-			"password", 	// Password needs to be at least 8 digits
-			"grade"
+			"student": {
+				"name",			// This is not optional.
+				"email", 		// Email must follow the format
+				"password", 	// Password needs to be at least 8 digits
+				"grade"
+			}
 		},
 		return: {
 			Created: {
@@ -29,8 +31,10 @@ Student: {
 		url:	localhost:3000/students/sign_in,
 		method:	POST,
 		paras: {
-			"email", 				// Only email can be used as login, since name may be duplicated.
-			"password"
+			"student": {
+				"email", 				// Only email can be used as login, since name may be duplicated.
+				"password"
+			}
 		},
 		return: {
 			Login Failure: {
@@ -59,5 +63,51 @@ Student: {
 		method: DELETE,
 		paras: nil,
 		return: nil
+	},
+	GetCase: {
+		url:	localhost:3000/cases,
+		method: GET,
+		paras: {
+			"caseInfo": {		// All the three ids should start at 1
+				"book_id"		
+				"unit_number"
+				"case_number"
+			}
+		},
+		return: {
+			Book Not Found: {
+				json: {
+					message: errmsg, 
+					reason: "Book Not Found"
+				}, 
+				status: 404
+			},
+			Unit Not Found: {
+				json: {
+					message: errmsg, 
+					reason: "Unit Not Found"
+				}, 
+				status: 404
+			},
+			Case Not Found: {
+				json: {
+					message: errmsg,
+					reason: "Case Not Found"
+				}, 
+				status: 404
+			},
+			Case Found: {
+				json: {
+				  vedio_resource: vrsc
+				  exercise_resources: ersc
+				}, 
+				status: 200
+			}
+		},
+		relationship: {
+			a Book has many Units.
+			a Unit has many cases in sequence.
+			a Case has many exercises and videos in sequence.
+		}
 	}
 }
