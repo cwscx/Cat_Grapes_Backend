@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
   
   devise_for :students, controllers: {
+    confirmations: 'students/confirmations',
     registrations: 'students/registrations',
     sessions: 'students/sessions',
+    passwords: 'users/passwords'
   }
   
   root to: "home#index"

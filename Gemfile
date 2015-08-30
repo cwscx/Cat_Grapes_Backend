@@ -33,7 +33,12 @@ gem 'bcrypt', '~> 3.1.7'
 # gem 'capistrano-rails', group: :development
 
 ####################User gem#####################
+# Login/SignUp
 gem 'devise', '~>3.5.2'
+
+# Test mailer
+# Instruction: In terminal, run mailcatcher; open http://127.0.0.1:1080/;
+gem 'mailcatcher', '~> 0.6.1'
 #################################################
 
 group :development, :test do
