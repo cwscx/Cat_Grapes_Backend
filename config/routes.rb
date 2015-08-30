@@ -10,6 +10,20 @@ Rails.application.routes.draw do
   get 'cases', to: 'cases#index'
   get 'sentences', to: 'sentences#index' 
   
+  devise_scope :students do
+    get  "/student/current_record", to: "students/student_current_records#index"
+    post "/student/current_record", to: "students/student_current_records#create"
+    post "/student/update_current_record", to: "students/student_current_recrods#update"
+    
+    get  "/student/learnt_components", to: "students/student_learnt_components#index"
+    post "/student/learnt_components", to: "students/student_learnt_components#create"
+    post "/student/update_learnt_components", to: "students/student_learnt_components#update"
+    
+    get  "/student/learnt_words", to: "students/student_learnt_words#index"
+    post "/student/learnt_words", to: "students/student_learnt_words#create"
+    post "/student/update_learnt_words", to: "students/student_learnt_words#update"
+  end
+  
   root to: "home#index"
   
   # The priority is based upon order of creation: first created -> highest priority.
