@@ -19,6 +19,9 @@ class Students::RegistrationsController < Devise::RegistrationsController
       resource.save    
       yield resource if block_given?
       
+      puts resource.persisted?
+      puts resource.active_for_authentication?
+      
       # Check if the email is signed up before
       if resource.persisted?
         # Check if this account is already confirmed
@@ -38,7 +41,6 @@ class Students::RegistrationsController < Devise::RegistrationsController
       else
         clean_up_passwords resource
         set_minimum_password_length
-        
         respond_to do |format|
           format.json {render json: {student: resource, status: "Existed"}, status: 202}
         end

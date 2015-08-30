@@ -4,8 +4,8 @@ Student: {
 		method: POST,
 		paras: {
 			"name",			// This is not optional.
-			"email", 
-			"password", 
+			"email", 		// Email must follow the format
+			"password", 	// Password needs to be at least 8 digits
 			"grade"
 		},
 		return: {
@@ -53,5 +53,11 @@ Student: {
 				status: 200
 			}
 		}
+	},
+	Logout: {
+		url:	localhost:3000/students/sign_out,
+		method: DELETE,
+		paras: nil,
+		return: nil
 	}
 }
