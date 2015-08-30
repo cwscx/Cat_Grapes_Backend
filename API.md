@@ -64,7 +64,7 @@ Student: {
 		paras: nil,
 		return: nil
 	},
-	GetCase: {
+	Get Case: {
 		url:	localhost:3000/cases,
 		method: GET,
 		paras: {
@@ -137,6 +137,44 @@ Student: {
 			    	  video_id:
 			  	},
 			  	status: 200
+			}
+		}
+	},
+	Get Learnt Components: {
+		url:	localhost:3000/student/learnt_components,
+		method: GET,
+		paras:	nil,
+		return: {
+			Learnt Components Not Found: {
+				json: {
+					message: "Learnt Components Not Found."
+				}, 
+				status: 404
+			},
+			Found: {
+				json: {
+					learnt_components: current_student.student_learnt_components
+				}, 
+				status: 200
+			}
+		}
+	},
+	Get Learnt Words: {
+		url:	localhost:3000/student/learnt_words,
+		method: GET,
+		paras:	nil,
+		return: {
+			Learnt Words Not Found: {
+				json: {
+					message: "Learnt Words Not Found."
+				},
+				status: 404 
+			},
+			Found: {
+				json: {
+					learnt_words: current_student.student_learnt_words
+				}, 
+				status: 200
 			}
 		}
 	}

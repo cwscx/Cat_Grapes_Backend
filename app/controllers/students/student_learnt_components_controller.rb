@@ -1,13 +1,15 @@
-class StudentLearntComponentsController < ApplicationController
+class Students::StudentLearntComponentsController < ApplicationController
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }, on: :create
+  
+  before_action :authenticate_student!
   
   def index
     if request.format == "text/html"
       
     else
-      if @current_student.student_learnt_components
+      if current_student.student_learnt_components
         respond_to do |format|
-          format.json {render json: {learnt_components: @current_student.student_learnt_components}, status: 200 }
+          format.json {render json: {learnt_components: current_student.student_learnt_components}, status: 200 }
         end
       else
         respond_to do |format|
