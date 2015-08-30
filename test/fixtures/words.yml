@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  chinese: MyString
+  english: MyString
+  partofspeech: MyString
+  family: MyString
+  disctractors: MyString
+  source_title: MyString
+  grade: 1
+  semester: 1
+
+two:
+  chinese: MyString
+  english: MyString
+  partofspeech: MyString
+  family: MyString
+  disctractors: MyString
+  source_title: MyString
+  grade: 1
+  semester: 1

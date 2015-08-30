@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  chinese: MyText
+  english: MyText
+  disctractors: MyText
+  equivalents: MyText
+  core_id: 1
+  structure: MyString
+  source_title: MyString
+  grade: 1
+  semester: 1
+
+two:
+  chinese: MyText
+  english: MyText
+  disctractors: MyText
+  equivalents: MyText
+  core_id: 1
+  structure: MyString
+  source_title: MyString
+  grade: 1
+  semester: 1
