@@ -7,6 +7,9 @@ Rails.application.routes.draw do
     passwords: 'users/passwords'
   }
   
+  get 'cases', to: 'cases#index'
+  get 'sentences', to: 'sentences#index' 
+  
   root to: "home#index"
   
   # The priority is based upon order of creation: first created -> highest priority.
