@@ -24,7 +24,7 @@ class Students::RegistrationsController < Devise::RegistrationsController
       
       # Check if the email is signed up before
       if resource.persisted?
-        # Check if this account is already confirmed
+        # Check if this account is already confirmed. In this case, only the second condition will be called.
         if resource.active_for_authentication?
           sign_up(resource_name, resource)
           

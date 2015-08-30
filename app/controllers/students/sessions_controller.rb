@@ -1,5 +1,6 @@
 class Students::SessionsController < Devise::SessionsController
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }, on: :create
+  
   # before_filter :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in
