@@ -31,13 +31,13 @@ class Students::StudentLearntComponentsController < ApplicationController
     
       # If a hash is in another hash, the sub-hash needs to be read as |key, value|
       request.params[:learnedComponents].each do |key, value|
-        if @current_student.student_learnt_components.find_by(component_id: value[:component_id])
-          return_message << "Component #{value[:component_id]} already learnt! "
+        if current_student.student_learnt_components.find_by(component_id: value[:component_id])
+          return_message << "Component #{value[:component_id]} Already Learnt!\n"
         else
           # The default next_test_date is null, just add the test_interval to the current date
           next_test_date = Date.current().advance(:days => +value[:test_interval].to_i)
 
-          @current_student.student_learnt_components.create(
+          new_component = current_student.student_learnt_components.new(
             component_id: value[:component_id],
             current_strength: value[:current_strength],
             strength_history: value[:current_strength].to_s,
@@ -45,7 +45,12 @@ class Students::StudentLearntComponentsController < ApplicationController
             test_date_array: value[:test_interval].to_s,
             next_test_date: next_test_date
           )
-          return_message << "Component #{value[:component_id]} is newly learnt! "
+          
+          if new_component.save
+            return_message << "Component #{value[:component_id]} Is Learnt!\n"
+          else
+            return_message << "Component #{value[:component_id]} Creation Failure!\n"
+          end
         end
       end
     

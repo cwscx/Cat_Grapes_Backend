@@ -159,6 +159,34 @@ Student: {
 			}
 		}
 	},
+	Create Learnt Components: {
+		url: 	localhost:3000/student/learnt_components,
+		method: POST,
+		paras: {
+			"learnedComponents": {
+				1: {
+					"component_id",
+					"current_strength": 0,
+					"test_interval": 1,
+				},
+				2: {
+					"component_id",
+					"current_strength": 0,
+					"test_interval": 1,
+				},
+				3...
+			}
+		},
+		return: {
+			json: {
+				message: return_message		// Return message has 3 cases: 
+											// 1. 'Component xxx Is Learnt' (created successfully), 
+											// 2. 'Component xxx Creation Failure' (creation failed)
+											// 3. 'Component xxx Already Learnt' (This world should be updated)
+			}, 
+			status: :created
+		}
+	},
 	Get Learnt Words: {
 		url:	localhost:3000/student/learnt_words,
 		method: GET,
@@ -176,6 +204,34 @@ Student: {
 				}, 
 				status: 200
 			}
+		}
+	},
+	Create Learnt Words: {
+		url:	localhost:3000/student/learnt_words,
+		method: POST,
+		paras: {
+			"learnedWords": {
+				1: {
+					"word_id",
+					"current_strength": 0,
+					"test_interval": 1,
+				},
+				2: {
+					"word_id",
+					"current_strength": 0,
+					"test_interval": 1,
+				},
+				3...		
+			}
+		},
+		return: {
+			json: {
+				message: return_message		// Return message has 3 cases: 
+											// 1. 'Word xxx Is Learnt' (created successfully), 
+											// 2. 'Word xxx Creation Failure' (creation failed)
+											// 3. 'Word xxx Already Learnt' (This world should be updated)
+			}, 
+			status: :created
 		}
 	}
 }

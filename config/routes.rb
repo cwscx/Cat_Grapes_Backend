@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     post "/student/update_current_record", to: "students/student_current_recrods#update"
     
     get  "/student/learnt_components", to: "students/student_learnt_components#index"
-    post "/student/learnt_components", to: "students/student_learnt_components#create"
+    post "/student/add_learnt_components", to: "students/student_learnt_components#create"
     post "/student/update_learnt_components", to: "students/student_learnt_components#update"
     
     get  "/student/learnt_words", to: "students/student_learnt_words#index"

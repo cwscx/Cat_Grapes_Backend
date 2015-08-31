@@ -18,10 +18,7 @@ class Students::StudentLearntWordsController < ApplicationController
       end
     end
   end
-  
-  def new
-    
-  end
+
   
   def create
     if request.format == "text/html"
@@ -31,13 +28,13 @@ class Students::StudentLearntWordsController < ApplicationController
     
       # If a hash is in another hash, the sub-hash needs to be read as |key, value|
       request.params[:learnedWords].each do |key, value|
-        if @current_student.student_learnt_words.find_by(word_id: value[:word_id])
-          return_message << "Word #{value[:word_id]} already learnt! "
+        if current_student.student_learnt_words.find_by(word_id: value[:word_id])
+          return_message << "Word #{value[:word_id]} Already Learnt!\n"
         else
           # The default next_test_date is null, just add the test_interval to the current date
           next_test_date = Date.current().advance(:days => +value[:test_interval].to_i)
 
-          @current_student.student_learnt_words.create(
+          new_word = current_student.student_learnt_words.new(
             word_id: value[:word_id],
             current_strength: value[:current_strength],
             strength_history: value[:current_strength].to_s,
@@ -45,7 +42,12 @@ class Students::StudentLearntWordsController < ApplicationController
             test_date_array: value[:test_interval].to_s,
             next_test_date: next_test_date
           )
-          return_message << "Word #{value[:word_id]} is newly learnt! "
+          
+          if new_word.save
+            return_message << "Word #{value[:word_id]} Is Learnt!\n"
+          else
+            return_message << "Word #{value[:word_id]} Creation Failure\n"
+          end
         end
       end
     
@@ -55,11 +57,12 @@ class Students::StudentLearntWordsController < ApplicationController
     end
   end
   
+  
   def update
     if request.format == "text/html"
       
     else
-      word_id = request.params[:learnedWords][:word_id]
+      word_id = request.params[:word_id]
       if lword = @current_student.student_learnt_words.find_by(word_id: word_id)
       
         # Check the learned word id and the passed in edit id
