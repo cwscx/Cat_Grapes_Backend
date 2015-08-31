@@ -64,52 +64,63 @@ class Students::StudentLearntComponentsController < ApplicationController
     if request.format == "text/html"
       
     else
-      component_id = request.params[:learnedComponents][:component_id]
-      if lcomponent = @current_student.student_learnt_components.find_by(component_id: component_id)
+      return_message = ""   # variables to record component conditions to return message
       
-        # Check the learned component id and the passed in edit id
-        if lcomponent.id.to_i == request.params[:id].to_i
-        
+      request.params[:learnedComponents].each do |key, value|
+        # Check the component is created or not
+        if lcomponent = current_student.student_learnt_components.find_by(component_id: value[:component_id])
+          
           # Append the new strength and test interval to histories accordingly
           strength_history = lcomponent.strength_history
-          test_date_array = lcomponent.test_date_array 
-        
+          test_date_array = lcomponent.test_date_array  
+          
+          ###########################Update Strength###########################
           # If the component record is updated today already, override the history
           if lcomponent.updated_at.beginning_of_day() == DateTime.current().beginning_of_day()
-            # If the history is not nil, try to find the last element start with ','.
+            # If the history is not nil, try to find the last element start with ',', and clear it.
             # If nothing found, there's only one record in history, set the history to nil directly
             if !(strength_history.nil? || strength_history == "")
-              begin 
-                strength_history[/\s*,\s*/, -1] = ""
-              rescue Exception => e
+              # If there's no ',' in the string, clear the strength history directly
+              if strength_history.match(/\s*,\s*/).nil?
                 strength_history = ""
+              else
+                strength_history = strength_history.sub(/,\p{Digit}*\z/, "")
               end
+            else
+              raise "Strength History Invalid!"
             end
           end
-          # If the history is nil or has nothing, don't append ','
+          
+          # If the strength history is nil or has nothing, don't append ','
           if !(strength_history.nil? || strength_history == "")
             strength_history << ','
           end
-          strength_history << request.params[:learnedComponents][:current_strength].to_s
-
-        
+          strength_history << value[:current_strength].to_s
+          ######################################################################
+          
+          
+          ############################Update dates##############################
           # If the component record is updated today already, override the history
           if lcomponent.updated_at.beginning_of_day() == DateTime.current().beginning_of_day()
             # If the history is not nil, try to find the last element start with ','.
             # If nothing found, there's only one record in history, set the history to nil directly
             if !(test_date_array.nil? || test_date_array == "")
-              begin
-                test_date_array[/\s*,\s*/, -1] = ""
-              rescue
+              if test_date_array.match(/\s*,\s*/).nil?
                 test_date_array = ""
+              else
+                test_date_array = test_date_array.sub(/,\p{Digit}*\z/, "")
               end
+            else
+              raise "Test Date History Invalid!"
             end
           end
-          # If the history is nil or has nothing, don't append ','
+          
+          # If the test date history is nil or has nothing, don't append ','
           if !(test_date_array.nil? || test_date_array == "")
             test_date_array << ','
           end
-          test_date_array << request.params[:learnedComponents][:test_interval].to_s
+          test_date_array << value[:test_interval].to_s
+          ######################################################################
           
           
           # If the next_test_date is nil or earlier than current date, add the interval to the current time
@@ -120,29 +131,27 @@ class Students::StudentLearntComponentsController < ApplicationController
           else
             next_test_date = lcomponent.next_test_date.advance(:days => +request.params[:learnedComponents][:test_interval].to_i)
           end
-      
+          
           # Update the student Learned Component
-          StudentLearntComponent.update(
-            request.params[:id],
-            current_strength: request.params[:learnedComponents][:current_strength],
-            strength_history: strength_history,
-            test_interval: request.params[:learnedComponents][:test_interval],
-            test_date_array: test_date_array,
-            next_test_date: next_test_date
-          )
-        
-          respond_to do |format|
-            format.json {render json: {message: "The component's learning condition is updated"}, status: 200}
+          if StudentLearntComponent.update(
+              lcomponent.id,
+              current_strength: value[:current_strength],
+              strength_history: strength_history,
+              test_interval: value[:test_interval],
+              test_date_array: test_date_array,
+              next_test_date: next_test_date
+            )
+            return_message << "Component #{value[:component_id]} Condition Updated!\n"
+          else
+            return_message << "Component #{value[:component_id]} Condition Update Failure!\n"
           end
         else
-          respond_to do |format|
-            format.json {render json: {message: "The passed in component_id and learnt component id doesn't match"}, status: 400}
-          end
+          return_message << "Component #{value[:component_id]} Isn't Learnt!\n"
         end
-      else
-        respond_to do |format|
-          format.json {render json: {message: "The component is not even learnt yet"}, status: 304}
-        end
+      end
+      
+      respond_to do |format|
+        format.json {render json: {message: return_message}, status: 200}
       end
     end
   end
