@@ -71,6 +71,39 @@ ActiveRecord::Schema.define(version: 20150829223626) do
   add_index "exercises_words", ["exercise_id"], name: "index_exercises_words_on_exercise_id", using: :btree
   add_index "exercises_words", ["word_id"], name: "index_exercises_words_on_word_id", using: :btree
 
+  create_table "parents", force: :cascade do |t|
+    t.string   "email",                  limit: 255, default: "", null: false
+    t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "mobile",                 limit: 255
+    t.string   "name",                   limit: 255
+    t.string   "reset_password_token",   limit: 255
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip",     limit: 255
+    t.string   "last_sign_in_ip",        limit: 255
+    t.string   "confirmation_token",     limit: 255
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string   "unconfirmed_email",      limit: 255
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+  end
+
+  add_index "parents", ["confirmation_token"], name: "index_parents_on_confirmation_token", unique: true, using: :btree
+  add_index "parents", ["email"], name: "index_parents_on_email", unique: true, using: :btree
+  add_index "parents", ["reset_password_token"], name: "index_parents_on_reset_password_token", unique: true, using: :btree
+
+  create_table "parents_students", force: :cascade do |t|
+    t.integer "parent_id",  limit: 4
+    t.integer "student_id", limit: 4
+  end
+
+  add_index "parents_students", ["parent_id"], name: "index_parents_students_on_parent_id", using: :btree
+  add_index "parents_students", ["student_id"], name: "index_parents_students_on_student_id", using: :btree
+
   create_table "sentences", force: :cascade do |t|
     t.text     "chinese",      limit: 65535, null: false
     t.text     "english",      limit: 65535, null: false

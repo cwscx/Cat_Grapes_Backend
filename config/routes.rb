@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
   
+  devise_for :parents, controllers: {
+    confirmations: 'parents/confirmations',
+    registrations: 'parents/registrations',
+    sessions: 'parents/sessions',
+    passwords: 'users/passwords'  
+  }
+  
   devise_for :students, controllers: {
     confirmations: 'students/confirmations',
     registrations: 'students/registrations',

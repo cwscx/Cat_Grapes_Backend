@@ -19,9 +19,6 @@ class Students::RegistrationsController < Devise::RegistrationsController
       resource.save    
       yield resource if block_given?
       
-      puts resource.persisted?
-      puts resource.active_for_authentication?
-      
       # Check if the email is signed up before
       if resource.persisted?
         
