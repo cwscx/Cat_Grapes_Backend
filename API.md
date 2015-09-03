@@ -187,6 +187,34 @@ Student: {
 			status: :created
 		}
 	},
+	Update Learnt Components: {
+		url:	localhost:3000/student/update_learnt_components,
+		method:	POST,
+		paras: {
+			"learnedComponents": {
+				1: {
+					"component_id",
+					"current_strength",
+					"test_interval",
+				},
+				2: {
+					"component_id",
+					"current_strength",
+					"test_interval",
+				},
+				3...
+			}
+		},
+		return: {
+			json: {
+				message: return_message		// Return message has 3 cases: 
+											// 1. 'Component xxx Isn't Learnt' (No word found), 
+											// 2. 'Component xxx Condition Update Failure' (update failed)
+											// 3. 'Component xxx Condition Updated' (This world is updated)
+			}, 
+			status: :created
+		}
+	},
 	Get Learnt Words: {
 		url:	localhost:3000/student/learnt_words,
 		method: GET,
@@ -230,6 +258,34 @@ Student: {
 											// 1. 'Word xxx Is Learnt' (created successfully), 
 											// 2. 'Word xxx Creation Failure' (creation failed)
 											// 3. 'Word xxx Already Learnt' (This world should be updated)
+			}, 
+			status: :created
+		}
+	},
+	Update Learnt Words: {
+		url:	localhost:3000/student/update_learnt_words,
+		method:	POST,
+		paras: {
+			"learnedWords": {
+				1: {
+					"word_id",
+					"current_strength",
+					"test_interval",
+				},
+				2: {
+					"word_id",
+					"current_strength",
+					"test_interval",
+				},
+				3...
+			}
+		},
+		return: {
+			json: {
+				message: return_message		// Return message has 3 cases: 
+											// 1. 'Word xxx Isn't Learnt' (No word found), 
+											// 2. 'Word xxx Condition Update Failure' (update failed)
+											// 3. 'Word xxx Condition Updated' (This world is updated)
 			}, 
 			status: :created
 		}

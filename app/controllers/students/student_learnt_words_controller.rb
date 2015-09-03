@@ -102,10 +102,13 @@ class Students::StudentLearntWordsController < ApplicationController
           if lword.updated_at.beginning_of_day() == DateTime.current().beginning_of_day()
             # If the history is not nil, try to find the last element start with ','.
             # If nothing found, there's only one record in history, set the history to nil directly
+            # Also update the next_test_date
             if !(test_date_array.nil? || test_date_array == "")
               if test_date_array.match(/\s*,\s*/).nil?
+                lword.next_test_date = lword.next_test_date.advance(:days => -test_date_array.to_i)
                 test_date_array = ""
               else
+                lword.next_test_date = lword.next_test_date.advance(:days => -test_date_array.match(/\p{Digit}*\z/)[0].to_i)
                 test_date_array = test_date_array.sub(/,\p{Digit}*\z/, "")
               end
             else
@@ -125,9 +128,9 @@ class Students::StudentLearntWordsController < ApplicationController
           # Else add the interval to the recorded next test date
           next_test_date = Date.current()
           if(lword.next_test_date.nil? || lword.next_test_date < next_test_date)
-            next_test_date = next_test_date.advance(:days => +request.params[:learnedWords][:test_interval].to_i)
+            next_test_date = next_test_date.advance(:days => +value[:test_interval].to_i)
           else
-            next_test_date = lword.next_test_date.advance(:days => +request.params[:learnedWords][:test_interval].to_i)
+            next_test_date = lword.next_test_date.advance(:days => +value[:test_interval].to_i)
           end
           
           # Update the student Learned Word
